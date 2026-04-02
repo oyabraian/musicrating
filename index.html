@@ -160,17 +160,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 32px 40px;
     border-right: 1px solid var(--border);
     min-width: 0;
-    overflow-y: auto; /* scroll internally if viewport very small */
+    overflow-y: hidden; /* scroll internally if viewport very small */
     background: radial-gradient(ellipse at 50% 35%, rgba(201,160,160,0.035) 0%, transparent 65%);
+  }
+
+  @media (max-height: 700px) {
+    .p-left {
+      overflow-y: auto;
+    }
+  }
+
+  .player-core {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 18px;
   }
 
   .art-frame {
     position: relative; width: min(230px, 42vw); height: min(230px, 42vw);
-    margin-bottom: 26px; border-radius: 10px; overflow: hidden;
+    border-radius: 10px; overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     transition: box-shadow 0.4s ease;
     flex-shrink: 0;
@@ -178,16 +193,16 @@
   .art-frame.playing { box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,160,160,0.14); }
   #p-art { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
   .art-frame.playing #p-art { transform: scale(1.025); }
-  .p-track { text-align: center; margin-bottom: 18px; width: 100%; max-width: 360px; flex-shrink: 0; }
+  .p-track { text-align: center; width: 100%; max-width: 360px; flex-shrink: 0; }
   #p-name   { font-family: var(--serif); font-size: clamp(17px, 2.8vw, 25px); line-height: 1.2; margin-bottom: 4px; }
   #p-artist { font-size: 12px; color: var(--text-dim); }
-  .prog-wrap { width: 100%; max-width: 360px; margin-bottom: 18px; flex-shrink: 0; }
+  .prog-wrap { width: 100%; max-width: 360px; flex-shrink: 0; }
   .prog-bar { width: 100%; height: 2px; background: var(--border); border-radius: 2px; cursor: pointer; margin-bottom: 7px; }
   .prog-fill { height: 100%; background: var(--rose); border-radius: 2px; width: 0%; transition: width 0.5s linear; position: relative; }
   .prog-fill::after { content: ''; position: absolute; right: -5px; top: -4px; width: 10px; height: 10px; background: var(--rose2); border-radius: 50%; opacity: 0; transition: opacity 0.2s; }
   .prog-wrap:hover .prog-fill::after { opacity: 1; }
   .prog-times { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); }
-  .controls { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; flex-shrink: 0; }
+  .controls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
   .c-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: color 0.15s, background 0.15s; }
   .c-btn:hover { color: var(--text); background: var(--bg2); }
   .c-btn.active { color: var(--rose); }
@@ -488,6 +503,7 @@
     <div class="screen" id="s-player">
       <!-- LEFT: player + rating widget -->
       <div class="p-left">
+        <div class="player-core">
         <div class="art-frame" id="art-frame">
           <img id="p-art" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%231c1c24'/%3E%3C/svg%3E" alt="">
         </div>
@@ -507,15 +523,16 @@
         <div class="controls">
           <!-- Spotify-style shuffle icon: two arrows each with a forked tail -->
           <button class="c-btn active" id="btn-nr" title="No-repeat shuffle" onclick="toggleNR()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <!-- top arrow: right-pointing, forked left tail -->
-              <polyline points="16,3 21,3 21,8"/>
-              <line x1="21" y1="3" x2="14" y2="10"/>
-              <polyline points="4,3 7,3 10,6"/>
-              <!-- bottom arrow: left-pointing, forked right tail -->
-              <polyline points="8,21 21,21 21,16"/>
-              <line x1="21" y1="21" x2="14" y2="14"/>
-              <polyline points="4,21 7,21 10,18"/>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+
+              <path d="M3 7h3l5 5"/>
+              <path d="M14 4h6v6"/>
+
+              <path d="M3 17h3l5-5"/>
+              <path d="M14 20h6v-6"/>
+
             </svg>
           </button>
           <button class="c-btn" onclick="prevT()">
@@ -532,6 +549,8 @@
               <polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/>
             </svg>
           </button>
+        </div>
+
         </div>
 
         <!-- Rating widget -->
