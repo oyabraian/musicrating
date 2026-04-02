@@ -256,6 +256,7 @@
     <div class="hdr-r">
       <div class="dot" id="hdr-dot"></div>
       <span id="hdr-lbl">not connected</span>
+      <button id="btn-reconnect" class="btn-bare" style="display:none;font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:4px;margin-left:6px;" onclick="reconnect()">Reconnect</button>
     </div>
   </header>
   <main>
@@ -525,8 +526,18 @@ function clearAuth() {
   localStorage.removeItem('mr_tok');
   localStorage.removeItem('mr_exp');
   localStorage.removeItem('mr_rt');
+  document.getElementById('btn-reconnect').style.display='none';
   show('s-setup');
   toast('Session expired — please reconnect Spotify.');
+}
+
+function reconnect() {
+  S.token=null;
+  localStorage.removeItem('mr_tok');
+  localStorage.removeItem('mr_exp');
+  localStorage.removeItem('mr_rt');
+  show('s-setup');
+  toast('Enter your Client ID and reconnect.');
 }
 
 // API
@@ -835,6 +846,8 @@ function show(id){
   document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
   const sc=document.getElementById(id);
   sc.style.display='flex';sc.classList.add('active');
+  // Show Reconnect button on authenticated screens only
+  document.getElementById('btn-reconnect').style.display=(id==='s-setup')?'none':'inline-flex';
   if(id==='s-player'){renderQ();refreshRank();refreshStats();}
   if(id==='s-playlist')renderTL();
 }
@@ -914,4 +927,3 @@ init();
 </script>
 </body>
 </html>
-
