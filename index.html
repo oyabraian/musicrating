@@ -68,6 +68,21 @@
   .btn-back-pl:hover { border-color: var(--text-mid); color: var(--text); }
   .btn-back-pl.visible { display: inline-flex; }
 
+  /* Now Playing return button — shown on playlist screen when a track is active */
+  .btn-now-playing {
+    display: none; align-items: center; gap: 7px;
+    background: var(--rose-dim); border: 1px solid rgba(201,160,160,0.28); border-radius: 6px;
+    color: var(--rose2); font-family: var(--sans); font-size: 11px;
+    padding: 5px 11px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-now-playing:hover { background: rgba(201,160,160,0.18); border-color: var(--rose); color: var(--text); }
+  .btn-now-playing.visible { display: inline-flex; }
+  .btn-now-playing .np-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--rose); flex-shrink: 0;
+    animation: blink 2s ease-in-out infinite;
+  }
+
   main { flex: 1; display: flex; flex-direction: column; }
   .screen { display: none; }
   .screen.active { display: flex; }
@@ -434,6 +449,14 @@
           <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
         </svg>
         Playlist
+      </button>
+      <!-- Return to now playing — shown on playlist screen when something is playing -->
+      <button id="btn-now-playing" class="btn-now-playing" onclick="show('s-player')">
+        <span class="np-dot"></span>
+        Now Playing
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
       </button>
       <div class="dot" id="hdr-dot"></div>
       <span id="hdr-lbl">not connected</span>
@@ -1241,6 +1264,9 @@ function show(id){
   // Back to playlist button: visible only on player screen
   const backBtn = document.getElementById('btn-back-pl');
   backBtn.classList.toggle('visible', id === 's-player');
+  // Now Playing button: visible on playlist screen only when a track is active
+  const npBtn = document.getElementById('btn-now-playing');
+  npBtn.classList.toggle('visible', id === 's-playlist' && !!S.cur);
   document.getElementById('btn-reconnect').style.display=(id==='s-setup')?'none':'inline-flex';
   if(id==='s-player'){renderQ();refreshRank();refreshStats();}
   if(id==='s-playlist')renderTL();
