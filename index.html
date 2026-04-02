@@ -582,8 +582,7 @@ async function fetchPl() {
     const pl=await api(`https://api.spotify.com/v1/playlists/${id}?fields=name,description,images`);
     if(!pl||!pl.name) throw new Error('Invalid playlist response from Spotify.');
 
-    // Step 2: fetch tracks using new /items endpoint (required since Feb 2026)
-    // No fields filter — Spotify silently returns empty data if the filter is malformed
+    // Step 2: fetch tracks using the /items endpoint
     let items=[];
     let next=`https://api.spotify.com/v1/playlists/${id}/items?limit=100`;
     while(next){
@@ -592,16 +591,22 @@ async function fetchPl() {
       items=items.concat(pg.items);
       next=pg.next||null;
     }
-    if(!items.length) throw new Error('No tracks returned. Make sure this playlist belongs to the Spotify account you logged in with (Dev Mode restriction).');
+    console.log('[musicrating] raw items from Spotify:', items.length, items.slice(0,2));
 
+    // Only filter out null tracks (deleted/unavailable) — no type check
     S.tracks=items
-      .filter(i=>i&&i.track&&i.track.id&&i.track.type==='track')
+      .filter(i=>i&&i.track&&i.track.id)
       .map(i=>({
-        id:i.track.id, name:i.track.name,
-        artist:(i.track.artists||[]).map(a=>a.name).join(', '),
+        id:i.track.id,
+        name:i.track.name||'Unknown',
+        artist:(i.track.artists||[]).map(a=>a.name).join(', ')||'Unknown',
         albumArt:i.track.album?.images?.[1]?.url||i.track.album?.images?.[0]?.url||'',
-        duration:i.track.duration_ms,
+        duration:i.track.duration_ms||0,
       }));
+
+    if(!S.tracks.length){
+      throw new Error(`Got ${items.length} raw items but 0 valid tracks. The playlist may contain only local files, podcasts, or removed tracks.`);
+    }
     document.getElementById('pl-name').textContent=pl.name;
     document.getElementById('pl-desc').textContent=S.tracks.length+' tracks';
     const art=pl.images?.[0]?.url; if(art) document.getElementById('pl-art').src=art;
