@@ -187,29 +187,46 @@
     position: relative; width: min(230px, 42vw); height: min(230px, 42vw);
     margin-bottom: 26px; border-radius: 10px; overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    transition: box-shadow 0.4s ease;
+    transition: box-shadow 0.9s ease;
     flex-shrink: 0;
+    --glow: rgba(201,160,160,0.15);
   }
-  .art-frame.playing { box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,160,160,0.14); }
+  .art-frame.playing { box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,160,160,0.14), 0 0 55px var(--glow); }
   #p-art { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
   .art-frame.playing #p-art { transform: scale(1.025); }
   .p-track { text-align: center; margin-bottom: 18px; width: 100%; max-width: 360px; flex-shrink: 0; }
   #p-name   { font-family: var(--serif); font-size: clamp(17px, 2.8vw, 25px); line-height: 1.2; margin-bottom: 4px; }
   #p-artist { font-size: 12px; color: var(--text-dim); }
   .prog-wrap { width: 100%; max-width: 360px; margin-bottom: 18px; flex-shrink: 0; }
-  .prog-bar { width: 100%; height: 2px; background: var(--border); border-radius: 2px; cursor: pointer; margin-bottom: 7px; }
-  .prog-fill { height: 100%; background: var(--rose); border-radius: 2px; width: 0%; transition: width 0.5s linear; position: relative; }
-  .prog-fill::after { content: ''; position: absolute; right: -5px; top: -4px; width: 10px; height: 10px; background: var(--rose2); border-radius: 50%; opacity: 0; transition: opacity 0.2s; }
+  .prog-bar {
+    width: 100%; height: 16px; background: transparent; border-radius: 0;
+    cursor: pointer; margin-bottom: 7px; position: relative; display: flex; align-items: center;
+  }
+  .prog-bar::before {
+    content: ''; position: absolute; left: 0; right: 0; height: 3px;
+    background: var(--border); border-radius: 2px; pointer-events: none;
+  }
+  .prog-fill {
+    height: 3px; background: var(--rose); border-radius: 2px;
+    width: 0%; transition: width 0.5s linear, background 0.9s ease; position: relative; z-index: 1;
+  }
+  .prog-fill::after { content: ''; position: absolute; right: -5px; top: -4px; width: 10px; height: 10px; background: var(--rose2); border-radius: 50%; opacity: 0; transition: opacity 0.2s, background 0.9s ease; }
   .prog-wrap:hover .prog-fill::after { opacity: 1; }
   .prog-times { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); }
   .controls { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; flex-shrink: 0; }
   .c-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: color 0.15s, background 0.15s; }
   .c-btn:hover { color: var(--text); background: var(--bg2); }
-  .c-btn.active { color: var(--rose); }
-  .play-btn { background: var(--rose); color: #1a0f0f; width: 48px; height: 48px; border-radius: 50%; box-shadow: 0 4px 16px rgba(201,160,160,0.28); }
+  .c-btn:active { transform: scale(0.88); opacity: 0.75; }
+  .c-btn.active { color: var(--rose); transition: color 0.9s ease; }
+  .play-btn { background: var(--rose); color: #1a0f0f; width: 48px; height: 48px; border-radius: 50%; box-shadow: 0 4px 16px rgba(201,160,160,0.28); transition: background 0.9s ease, transform 0.15s, box-shadow 0.9s ease; }
   .play-btn:hover { background: var(--rose2); color: #1a0f0f; transform: scale(1.05); }
+  .play-btn:active { transform: scale(0.92) !important; }
 
-  /* Prominent reshuffle button on main player */
+  /* Action button row (reshuffle + skip-rated) */
+  .player-actions {
+    display: flex; gap: 9px; margin-bottom: 20px; flex-shrink: 0; flex-wrap: wrap; justify-content: center;
+  }
+  /* Prominent reshuffle / action pill buttons on main player */
   .reshuffle-main {
     display: inline-flex; align-items: center; gap: 8px;
     background: none;
@@ -217,11 +234,10 @@
     border-radius: 24px;
     color: var(--rose);
     font-family: var(--sans); font-size: 12px; font-weight: 400;
-    padding: 8px 20px;
+    padding: 8px 18px;
     cursor: pointer;
-    margin-bottom: 20px;
     flex-shrink: 0;
-    transition: all 0.18s ease;
+    transition: background 0.18s ease, border-color 0.18s, color 0.18s, transform 0.12s, box-shadow 0.18s;
     letter-spacing: 0.3px;
   }
   .reshuffle-main:hover {
@@ -231,7 +247,16 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(201,160,160,0.14);
   }
-  .reshuffle-main:active { transform: none; }
+  .reshuffle-main:active { transform: scale(0.96) !important; }
+  .reshuffle-main.active {
+    background: var(--rose-dim);
+    border-color: var(--rose);
+    color: var(--rose2);
+  }
+
+  /* Excluded track in playlist when skip-rated is on */
+  .t-row.excl-rated { opacity: 0.28; }
+  .t-row.excl-rated .t-badge { text-decoration: line-through; }
 
   /* ── RATING BLOCK ── */
   .rating-block {
@@ -318,8 +343,15 @@
   .q-now-artist { font-size: 11px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* Mini progress in queue */
-  .q-prog-bar { width: 100%; height: 2px; background: var(--border); border-radius: 2px; margin-bottom: 10px; cursor: pointer; }
-  .q-prog-fill { height: 100%; background: var(--rose); border-radius: 2px; width: 0%; transition: width 0.5s linear; }
+  .q-prog-bar {
+    width: 100%; height: 14px; background: transparent; border-radius: 0;
+    margin-bottom: 10px; cursor: pointer; position: relative; display: flex; align-items: center;
+  }
+  .q-prog-bar::before {
+    content: ''; position: absolute; left: 0; right: 0; height: 2px;
+    background: var(--border); border-radius: 2px; pointer-events: none;
+  }
+  .q-prog-fill { height: 2px; background: var(--rose); border-radius: 2px; width: 0%; transition: width 0.5s linear, background 0.9s ease; position: relative; z-index: 1; }
   .q-prog-times { display: flex; justify-content: space-between; font-size: 9px; color: var(--text-dim); margin-bottom: 10px; }
 
   /* Queue controls row */
@@ -430,6 +462,41 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
+  /* ── Color-reactive transitions ── */
+  #s-player { transition: --rose 0.9s ease; }
+  .q-play-btn { background: var(--rose); transition: background 0.9s ease; }
+  .q-play-btn:hover { background: var(--rose2); }
+  .tab.on { color: var(--rose2); border-bottom-color: var(--rose); transition: color 0.9s ease, border-color 0.9s ease; }
+  .q-reshuffle:hover { border-color: var(--rose); color: var(--rose); }
+
+  /* ── Page / screen transition ── */
+  @keyframes screenFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .screen.active { animation: screenFadeIn 0.28s ease both; }
+
+  /* ── Track change animations ── */
+  @keyframes artReveal {
+    from { opacity: 0; transform: scale(0.93); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes textReveal {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .art-changing #p-art { animation: artReveal 0.42s ease forwards; }
+  #p-name.text-anim   { animation: textReveal 0.32s ease forwards; }
+  #p-artist.text-anim { animation: textReveal 0.38s 0.04s ease forwards; }
+
+  /* ── Tab panel fade ── */
+  @keyframes panelFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .panel.on { animation: panelFadeIn 0.22s ease both; }
+
+  /* ── Button feedback ── */
+  .btn:active  { transform: scale(0.96) !important; box-shadow: none !important; }
+  .q-c-btn:active { transform: scale(0.88); opacity: 0.75; }
+
   @media (max-width: 680px) {
     #s-player { flex-direction: column; height: auto; min-height: calc(100vh - 57px); overflow: auto; }
     .p-right { width: 100%; height: 360px; border-top: 1px solid var(--border); flex-shrink: 0; }
@@ -536,7 +603,7 @@
       <!-- LEFT: player + rating widget -->
       <div class="p-left">
         <div class="art-frame" id="art-frame">
-          <img id="p-art" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%231c1c24'/%3E%3C/svg%3E" alt="">
+          <img id="p-art" crossorigin="anonymous" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%231c1c24'/%3E%3C/svg%3E" alt="">
         </div>
         <div class="p-track">
           <div id="p-name">—</div>
@@ -568,14 +635,22 @@
           </button>
         </div>
 
-        <!-- Reshuffle queue button -->
-        <button class="reshuffle-main" onclick="reshuffleQ()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/>
-            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
-          </svg>
-          Reshuffle Queue
-        </button>
+        <!-- Action buttons row -->
+        <div class="player-actions">
+          <button class="reshuffle-main" onclick="reshuffleQ()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/>
+              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+            </svg>
+            Reshuffle
+          </button>
+          <button class="reshuffle-main" id="btn-excl" onclick="toggleExclRated()" title="Exclude already-rated tracks from shuffle">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+            </svg>
+            Skip Rated
+          </button>
+        </div>
 
         <!-- Rating widget -->
         <div class="rating-block">
@@ -653,6 +728,7 @@ const S = {
   playing:false, noRepeat:true, played:new Set(),
   ratings:{}, filt:'top', progTimer:null,
   pos:0, dur:0, hist:[],
+  excludeRated: false,
 };
 
 // Prevent double-firing of natural track end
@@ -889,15 +965,17 @@ function updArt(){document.getElementById('art-frame').classList.toggle('playing
 
 // ── Shuffle / Queue ───────────────────────────────────────────────────────────
 function buildQ(){
-  const idx=Array.from({length:S.tracks.length},(_,i)=>i);
+  let pool = S.excludeRated ? S.tracks.filter(t=>!S.ratings[t.id]) : S.tracks;
+  if(!pool.length) pool = S.tracks; // fallback: if everything's rated, use all
+  const idx=Array.from({length:pool.length},(_,i)=>i);
   for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
-  S.queue=idx.map(i=>S.tracks[i]);S.qi=0;S.played=new Set();
+  S.queue=idx.map(i=>pool[i]);S.qi=0;S.played=new Set();
 }
 
 // Build queue with a specific track first, rest shuffled
 function buildQFrom(track) {
-  const rest = S.tracks.filter(t => t.id !== track.id);
-  // Fisher-Yates shuffle the rest
+  let rest = S.tracks.filter(t => t.id !== track.id);
+  if(S.excludeRated) rest = rest.filter(t => !S.ratings[t.id]);
   for(let i=rest.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
     [rest[i],rest[j]]=[rest[j],rest[i]];
@@ -992,11 +1070,108 @@ async function seekTo(e){
 }
 function ms2t(ms){const s=Math.floor(ms/1000),m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
 
+// ── Album art color extraction ────────────────────────────────────────────────
+function rgbToHsl(r,g,b){
+  r/=255;g/=255;b/=255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b);
+  let h,s,l=(max+min)/2;
+  if(max===min){h=s=0;}
+  else{
+    const d=max-min;
+    s=l>0.5?d/(2-max-min):d/(max+min);
+    switch(max){
+      case r:h=(g-b)/d+(g<b?6:0);break;
+      case g:h=(b-r)/d+2;break;
+      case b:h=(r-g)/d+4;break;
+    }
+    h/=6;
+  }
+  return[Math.round(h*360),Math.round(s*100),Math.round(l*100)];
+}
+
+function extractColor(imgEl){
+  try{
+    const canvas=document.createElement('canvas');
+    const sz=64; canvas.width=canvas.height=sz;
+    const ctx=canvas.getContext('2d');
+    ctx.drawImage(imgEl,0,0,sz,sz);
+    const data=ctx.getImageData(0,0,sz,sz).data;
+    let bH=0,bS=0,bL=50,bScore=-1;
+    for(let i=0;i<data.length;i+=20){ // sample ~1 in 5 pixels
+      const r=data[i],g=data[i+1],b=data[i+2];
+      const[h,s,l]=rgbToHsl(r,g,b);
+      // score: prefer saturated, mid-brightness (not black/white/grey)
+      const score=(s/100)*(1-Math.abs((l/100)-0.48)*2.4);
+      if(score>bScore){bScore=score;bH=h;bS=s;bL=l;}
+    }
+    // Clamp to UI-friendly range
+    const s=Math.max(bS,42);
+    const l=Math.max(36,Math.min(62,bL));
+    applyAccentColor(bH,s,l);
+  }catch(e){}// CORS / tainted canvas — silently skip
+}
+
+function applyAccentColor(h,s,l){
+  const player=document.getElementById('s-player');
+  if(!player)return;
+  const l2=Math.min(l+13,84), s2=Math.min(s+6,100);
+  player.style.setProperty('--rose',`hsl(${h},${s}%,${l}%)`);
+  player.style.setProperty('--rose2',`hsl(${h},${s2}%,${l2}%)`);
+  player.style.setProperty('--rose-dim',`hsla(${h},${s}%,${l}%,0.11)`);
+  const artFrame=document.getElementById('art-frame');
+  if(artFrame) artFrame.style.setProperty('--glow',`hsla(${h},${s}%,${l}%,0.32)`);
+}
+
+// ── Exclude rated toggle ──────────────────────────────────────────────────────
+function toggleExclRated(){
+  S.excludeRated=!S.excludeRated;
+  document.getElementById('btn-excl')?.classList.toggle('active',S.excludeRated);
+  // Rebuild queue applying the new filter
+  if(S.queue.length){
+    const cur=S.cur;
+    buildQ();
+    if(cur){
+      const ci=S.queue.findIndex(x=>x.id===cur.id);
+      if(ci>0){[S.queue[0],S.queue[ci]]=[S.queue[ci],S.queue[0]];}
+      S.qi=0;
+    }
+    renderQ();
+  }
+  renderTL();
+  const rated=Object.keys(S.ratings).length;
+  toast(S.excludeRated?`Skipping ${rated} rated track${rated!==1?'s':''}  from shuffle`:'Including all tracks in shuffle');
+}
+
 // ── Player UI ─────────────────────────────────────────────────────────────────
 function updPlayerUI(t){
-  document.getElementById('p-name').textContent=t.name;
-  document.getElementById('p-artist').textContent=t.artist;
-  if(t.albumArt)document.getElementById('p-art').src=t.albumArt;
+  // ── Track change animation ──
+  const artFrame = document.getElementById('art-frame');
+  const artEl    = document.getElementById('p-art');
+  const nameEl   = document.getElementById('p-name');
+  const artistEl = document.getElementById('p-artist');
+
+  // Animate art
+  artFrame.classList.remove('art-changing');
+  void artFrame.offsetWidth; // force reflow
+  artFrame.classList.add('art-changing');
+  setTimeout(()=>artFrame.classList.remove('art-changing'), 450);
+
+  // Update art with color extraction on load
+  if(t.albumArt){
+    artEl.crossOrigin = 'anonymous';
+    artEl.onload = ()=>{ try{ extractColor(artEl); }catch(e){} };
+    artEl.src = t.albumArt;
+  }
+
+  // Animate text
+  nameEl.classList.remove('text-anim');
+  artistEl.classList.remove('text-anim');
+  void nameEl.offsetWidth;
+  nameEl.textContent  = t.name;
+  artistEl.textContent = t.artist;
+  nameEl.classList.add('text-anim');
+  artistEl.classList.add('text-anim');
+
   const r=S.ratings[t.id];
   updRatingUI(r?r.rating:null);
   renderQ();
@@ -1228,7 +1403,8 @@ function renderTL(){
   const el=document.getElementById('tl');if(!S.tracks.length){el.innerHTML='';return;}
   el.innerHTML=S.tracks.map((t,i)=>{
     const r=S.ratings[t.id],isNow=S.cur?.id===t.id;
-    return `<div class="t-row ${isNow?'now':''}" onclick="playFromPlaylist('${t.id}')">
+    const excl=S.excludeRated&&!!r&&!isNow;
+    return `<div class="t-row ${isNow?'now':''} ${excl?'excl-rated':''}" onclick="playFromPlaylist('${t.id}')">
       <div class="t-idx">${i+1}</div>
       <img class="t-img" src="${esc(t.albumArt)}" alt="" onerror="this.src=''">
       <div class="t-info"><h4>${esc(t.name)}</h4><p>${esc(t.artist)}</p></div>
@@ -1333,6 +1509,7 @@ async function init(){
   loadR();
   initStars();
   document.getElementById('btn-nr')?.classList.toggle('active', S.noRepeat);
+  document.getElementById('btn-excl')?.classList.toggle('active', S.excludeRated);
   const saved=loadCid();if(saved)document.getElementById('cid').value=saved;
   const p=new URLSearchParams(window.location.search);
   if(p.get('code')){
