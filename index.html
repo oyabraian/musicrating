@@ -591,17 +591,16 @@ async function fetchPl() {
       items=items.concat(pg.items);
       next=pg.next||null;
     }
-    console.log('[musicrating] raw items from Spotify:', items.length, items.slice(0,2));
 
-    // Only filter out null tracks (deleted/unavailable) — no type check
+    // Only filter out null entries — field renamed track→item in Feb 2026
     S.tracks=items
-      .filter(i=>i&&i.track&&i.track.id)
+      .filter(i=>i&&i.item&&i.item.id)
       .map(i=>({
-        id:i.track.id,
-        name:i.track.name||'Unknown',
-        artist:(i.track.artists||[]).map(a=>a.name).join(', ')||'Unknown',
-        albumArt:i.track.album?.images?.[1]?.url||i.track.album?.images?.[0]?.url||'',
-        duration:i.track.duration_ms||0,
+        id:i.item.id,
+        name:i.item.name||'Unknown',
+        artist:(i.item.artists||[]).map(a=>a.name).join(', ')||'Unknown',
+        albumArt:i.item.album?.images?.[1]?.url||i.item.album?.images?.[0]?.url||'',
+        duration:i.item.duration_ms||0,
       }));
 
     if(!S.tracks.length){
