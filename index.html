@@ -26,7 +26,6 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* Lock the viewport — inner panels handle their own scroll */
   html, body { height: 100%; overflow: hidden; }
   body {
     background: var(--bg); color: var(--text);
@@ -38,10 +37,8 @@
     pointer-events: none; z-index: 0;
   }
 
-  /* Root app fills the viewport exactly */
   #app { height: 100vh; display: flex; flex-direction: column; position: relative; z-index: 1; }
 
-  /* ── HEADER ── */
   header {
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: space-between;
@@ -59,12 +56,10 @@
   .dot.now { background: var(--rose); box-shadow: 0 0 8px var(--rose); animation: blink 2s ease-in-out infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-  /* main fills remaining viewport, screens live inside */
   main { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
   .screen { display: none; }
   .screen.active { display: flex; flex: 1; min-height: 0; }
 
-  /* ── SHARED CONTROLS ── */
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 7px;
     padding: 10px 20px; border: none; border-radius: 6px;
@@ -92,7 +87,6 @@
   .spin { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--rose); border-radius: 50%; animation: rot .7s linear infinite; display: inline-block; }
   @keyframes rot { to { transform: rotate(360deg); } }
 
-  /* ── SETUP ── */
   #s-setup {
     flex-direction: column; align-items: center; justify-content: center;
     overflow-y: auto; padding: 40px 20px;
@@ -109,11 +103,10 @@
   .stxt a:hover { text-decoration: underline; }
   .stxt code { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 11px; color: var(--rose2); font-family: monospace; }
 
-  /* ── PLAYLIST ── */
   #s-playlist {
     flex-direction: column; align-items: center;
-    overflow-y: auto;            /* this screen scrolls normally */
-    padding: 36px 20px 100px;   /* bottom pad for mini-player bar */
+    overflow-y: auto;
+    padding: 36px 20px 100px;
     position: relative;
   }
   .pl-wrap { width: 100%; max-width: 640px; }
@@ -146,7 +139,6 @@
   .t-badge.rated   { background: var(--rose-dim); color: var(--rose2); border: 1px solid rgba(201,160,160,.18); }
   .t-badge.unrated { color: var(--text-dim); }
 
-  /* Now-playing mini-bar — fixed at bottom of playlist screen */
   .np-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
     background: rgba(22,22,28,.96);
@@ -171,13 +163,10 @@
   .np-play-btn:hover { background: var(--rose2); }
   .np-go-btn { font-family: var(--sans); font-size: 11px; color: var(--rose2); background: var(--rose-dim); border: 1px solid rgba(201,160,160,.2); border-radius: 20px; padding: 5px 12px; cursor: pointer; transition: all .15s; white-space: nowrap; }
   .np-go-btn:hover { background: rgba(201,160,160,.18); }
-  .np-prog { position: absolute; top: 0; left: 0; height: 2px; background: var(--rose); border-radius: 0 2px 2px 0; transition: width .5s linear; pointer-events: none; }
+  .np-prog { position: absolute; top: 0; left: 0; height: 2px; background: var(--rose); border-radius: 0 2px 2px 0; pointer-events: none; }
 
-  /* ── PLAYER SCREEN ── */
-  /* Key: flex:1 + overflow:hidden + row layout bounds everything */
   #s-player { flex-direction: row; overflow: hidden; }
 
-  /* Left column: the main player controls — can scroll if viewport is too short */
   .p-left {
     flex: 1; min-width: 0; overflow-y: auto;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -198,7 +187,7 @@
   #p-artist { font-size: 12px; color: var(--text-dim); }
   .prog-wrap { width: 100%; max-width: 360px; margin-bottom: 16px; flex-shrink: 0; }
   .prog-bar { width: 100%; height: 2px; background: var(--border); border-radius: 2px; cursor: pointer; margin-bottom: 7px; }
-  .prog-fill { height: 100%; background: var(--rose); border-radius: 2px; width: 0%; transition: width .5s linear; position: relative; }
+  .prog-fill { height: 100%; background: var(--rose); border-radius: 2px; width: 0%; position: relative; }
   .prog-fill::after { content: ''; position: absolute; right: -5px; top: -4px; width: 10px; height: 10px; background: var(--rose2); border-radius: 50%; opacity: 0; transition: opacity .2s; }
   .prog-wrap:hover .prog-fill::after { opacity: 1; }
   .prog-times { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); }
@@ -209,7 +198,6 @@
   .play-btn { background: var(--rose); color: #1a0f0f; width: 48px; height: 48px; border-radius: 50%; box-shadow: 0 4px 16px rgba(201,160,160,.28); }
   .play-btn:hover { background: var(--rose2); color: #1a0f0f; transform: scale(1.05); }
 
-  /* Rating block */
   .rating-block { width: 100%; max-width: 360px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 22px 16px; flex-shrink: 0; }
   .rating-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
   .rating-top span { font-size: 11px; color: var(--text-dim); letter-spacing: .5px; text-transform: uppercase; }
@@ -224,8 +212,6 @@
   .kb-hint { font-size: 11px; color: var(--text-dim); }
   .kb-hint kbd { background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; font-family: monospace; font-size: 10px; color: var(--text-mid); }
 
-  /* ── RIGHT PANEL ── */
-  /* Must be a bounded flex column — never overflows the viewport */
   .p-right {
     width: 340px; flex-shrink: 0;
     display: flex; flex-direction: column;
@@ -236,14 +222,8 @@
   .tab:hover { color: var(--text); }
   .tab.on { color: var(--rose2); border-bottom-color: var(--rose); }
 
-  /* Each panel takes remaining height. overflow:hidden is required here
-     so child elements control their own scroll behaviour */
   .panel { display: none; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
   .panel.on { display: flex; }
-
-  /* ── QUEUE PANEL ─────────────────────────────────────────────────────── */
-  /* .q-header and .q-upnext-head are NOT scrollable — they are fixed      */
-  /* .q-list is the ONLY scrollable element in the queue panel              */
 
   .q-header {
     flex-shrink: 0;
@@ -260,7 +240,7 @@
   .q-mode-badge { font-size: 9px; letter-spacing: .5px; text-transform: uppercase; color: var(--text-dim); padding: 3px 8px; border-radius: 20px; border: 1px solid var(--border); white-space: nowrap; flex-shrink: 0; }
   .q-mode-badge.shuffle { background: var(--rose-dim); border-color: rgba(201,160,160,.25); color: var(--rose2); }
   .q-prog-bar { width: 100%; height: 2px; background: var(--border); border-radius: 2px; margin-bottom: 7px; cursor: pointer; }
-  .q-prog-fill { height: 100%; background: var(--rose); border-radius: 2px; width: 0%; transition: width .5s linear; }
+  .q-prog-fill { height: 100%; background: var(--rose); border-radius: 2px; width: 0%; }
   .q-prog-times { display: flex; justify-content: space-between; font-size: 9px; color: var(--text-dim); margin-bottom: 10px; }
   .q-ctrl-row { display: flex; align-items: center; gap: 4px; }
   .q-c-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 6px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: color .15s, background .15s; }
@@ -271,7 +251,6 @@
   .q-reshuffle { display: flex; align-items: center; gap: 5px; background: none; border: 1px solid var(--border); border-radius: 20px; color: var(--text-dim); font-family: var(--sans); font-size: 10px; padding: 4px 10px; cursor: pointer; transition: all .15s; }
   .q-reshuffle:hover { border-color: var(--rose); color: var(--rose); }
 
-  /* Up Next subheader — also NOT scrollable */
   .q-upnext-head {
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: space-between;
@@ -281,7 +260,6 @@
   .q-upnext-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); }
   .q-count-badge { font-size: 10px; color: var(--text-dim); }
 
-  /* THE scrollable list — flex:1 + overflow-y:auto + min-height:0 is the magic */
   .q-list { flex: 1; overflow-y: auto; min-height: 0; }
 
   .q-row { display: grid; grid-template-columns: 24px 36px minmax(0,1fr); gap: 9px; align-items: center; padding: 7px 14px; cursor: pointer; transition: background .15s; }
@@ -294,16 +272,13 @@
   .q-info p  { font-size: 10px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .q-empty { padding: 36px 16px; text-align: center; color: var(--text-dim); font-size: 12px; line-height: 2; }
 
-  /* ── RANKINGS PANEL ── */
   .panel-inner { display: flex; flex-direction: column; flex: 1; min-height: 0; }
   .chips { display: flex; gap: 5px; flex-wrap: wrap; padding: 10px 10px 8px; flex-shrink: 0; border-bottom: 1px solid var(--border); }
   .chip { background: none; border: 1px solid var(--border); border-radius: 20px; color: var(--text-dim); font-family: var(--sans); font-size: 11px; padding: 4px 12px; cursor: pointer; transition: all .15s; }
   .chip:hover { border-color: var(--text-mid); color: var(--text); }
   .chip.on { background: var(--rose-dim); border-color: rgba(201,160,160,.3); color: var(--rose2); }
-  /* Scrollable list for rankings */
   .rank-list { flex: 1; overflow-y: auto; min-height: 0; padding: 4px 0; }
 
-  /* KEY FIX: minmax(0,1fr) on info col prevents score from being pushed off */
   .r-row { display: grid; grid-template-columns: 22px 34px minmax(0,1fr) auto; gap: 9px; align-items: center; padding: 7px 12px; cursor: pointer; transition: background .15s; }
   .r-row:hover { background: rgba(255,255,255,.025); }
   .r-row.now { background: var(--rose-dim); }
@@ -313,13 +288,11 @@
   .r-info { min-width: 0; }
   .r-info h5 { font-size: 12px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .r-info p  { font-size: 10px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* Score column stays visible, never pushed off */
   .r-score { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
   .r-score-num { font-size: 12px; color: var(--rose2); white-space: nowrap; }
   .r-score-num.none { font-size: 11px; color: var(--text-dim); }
   .mini-stars { display: flex; gap: 1px; align-items: center; }
 
-  /* ── STATS PANEL ── */
   .stats-scroll { flex: 1; overflow-y: auto; min-height: 0; padding: 8px; }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
   .stat-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 12px 8px; text-align: center; }
@@ -334,7 +307,6 @@
 
   .empty { text-align: center; padding: 28px 16px; color: var(--text-dim); font-size: 12px; line-height: 2; }
 
-  /* Toast + Modal */
   #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--bg2); border: 1px solid var(--border); color: var(--text-mid); padding: 9px 18px; border-radius: 30px; font-size: 12px; opacity: 0; transition: all .25s ease; pointer-events: none; z-index: 999; white-space: nowrap; }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); z-index: 500; display: none; align-items: center; justify-content: center; }
@@ -370,44 +342,39 @@
 
   <main>
 
-    <!-- ══ SETUP ══════════════════════════════════════════════════════════════ -->
+    <!-- SETUP -->
     <div class="screen" id="s-setup">
       <div class="glyph">&#9835;</div>
       <h1 class="setup-title">Rate your music</h1>
       <p class="setup-sub">Shuffle any Spotify playlist. Rate every track.</p>
       <div class="card">
         <div class="steps">
-          <div class="step"><div class="snum">1</div><div class="stxt">Go to <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a> &#8594; create an app.</div></div>
-          <div class="step"><div class="snum">2</div><div class="stxt">Inside the app &#8594; <strong style="color:var(--text)">Edit Settings</strong> &#8594; Redirect URIs &#8594; add:<br><code>https://oyabraian.github.io/musicrating/</code></div></div>
+          <div class="step"><div class="snum">1</div><div class="stxt">Go to <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a> &rarr; create an app.</div></div>
+          <div class="step"><div class="snum">2</div><div class="stxt">Inside the app &rarr; <strong style="color:var(--text)">Edit Settings</strong> &rarr; Redirect URIs &rarr; add:<br><code>https://oyabraian.github.io/musicrating/</code></div></div>
           <div class="step"><div class="snum">3</div><div class="stxt">Copy your <strong style="color:var(--text)">Client ID</strong> and paste it below.</div></div>
         </div>
         <label class="flabel">Client ID</label>
         <input type="text" id="cid" placeholder="paste your client id here" autocomplete="off">
         <div class="err" id="setup-err"></div>
         <div style="margin-top:16px;"><button class="btn btn-rose" onclick="startAuth()" style="width:100%;">Connect Spotify</button></div>
-        <p style="font-size:11px;color:var(--text-dim);margin-top:13px;text-align:center;">Requires Spotify Premium &#183; all data stays in your browser</p>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:13px;text-align:center;">Requires Spotify Premium &middot; all data stays in your browser</p>
       </div>
     </div>
 
-    <!-- ══ PLAYLIST ═══════════════════════════════════════════════════════════ -->
+    <!-- PLAYLIST -->
     <div class="screen" id="s-playlist">
       <div class="pl-wrap">
-
-        <!-- Playlist loaded card — shows Play + Shuffle Play once a playlist is loaded -->
         <div class="pl-header" id="pl-hdr">
           <img id="pl-art" src="" alt="">
           <div class="pl-meta">
-            <h2 id="pl-name">&#8212;</h2>
-            <p id="pl-desc">&#8212;</p>
+            <h2 id="pl-name">&mdash;</h2>
+            <p id="pl-desc">&mdash;</p>
             <div class="pl-acts">
-              <!-- "Play" = sequential order, all songs -->
               <button class="btn btn-ghost" style="gap:6px;" onclick="goPlaySeq()">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
                 Play
               </button>
-              <!-- "Shuffle Play" = Fisher-Yates of unrated songs only -->
               <button class="btn btn-rose" style="gap:6px;" onclick="goPlayShuffle()">
-                <!-- Spotify-style shuffle icon -->
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
                   <path d="m18 2 4 4-4 4"/>
@@ -423,7 +390,7 @@
         </div>
 
         <div class="url-row">
-          <input type="text" id="pl-in" placeholder="paste a Spotify playlist link&#8230;">
+          <input type="text" id="pl-in" placeholder="paste a Spotify playlist link&hellip;">
           <button class="btn btn-rose" id="btn-load" onclick="fetchPl()">
             <span id="load-lbl">Load</span>
             <span id="load-sp" style="display:none;"><div class="spin"></div></span>
@@ -434,20 +401,18 @@
           &#9888;&#65039; Spotify Dev Mode only allows loading playlists <strong style="color:var(--text-mid)">you own</strong>.
         </p>
 
-        <!-- Track list — always in original S.tracks order, NEVER reordered -->
         <div id="tl-wrap" style="display:none;">
           <div class="section-head">Tracks</div>
           <div class="track-list" id="tl"></div>
         </div>
       </div>
 
-      <!-- Mini now-playing bar: fixed at bottom when something is playing -->
       <div class="np-bar" id="np-bar" onclick="show('s-player')">
         <div class="np-prog" id="np-prog"></div>
         <img class="np-bar-art" id="np-bar-art" src="" alt="" onerror="this.src=''">
         <div class="np-bar-info">
-          <div class="np-bar-name" id="np-bar-name">&#8212;</div>
-          <div class="np-bar-artist" id="np-bar-artist">&#8212;</div>
+          <div class="np-bar-name" id="np-bar-name">&mdash;</div>
+          <div class="np-bar-artist" id="np-bar-artist">&mdash;</div>
         </div>
         <div class="np-bar-right" onclick="event.stopPropagation()">
           <button class="np-btn np-play-btn" id="np-play-btn" onclick="togglePlay()">
@@ -457,29 +422,26 @@
           <button class="np-btn" onclick="nextT()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
           </button>
-          <button class="np-go-btn" onclick="show('s-player')">Player &#8594;</button>
+          <button class="np-go-btn" onclick="show('s-player')">Player &rarr;</button>
         </div>
       </div>
     </div>
 
-    <!-- ══ PLAYER ══════════════════════════════════════════════════════════════ -->
+    <!-- PLAYER -->
     <div class="screen" id="s-player">
-
-      <!-- LEFT: current song + controls + rating — always visible on this screen -->
       <div class="p-left">
         <div class="art-frame" id="art-frame">
           <img id="p-art" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect width='256' height='256' fill='%231c1c24'/%3E%3C/svg%3E" alt="">
         </div>
         <div class="p-track">
-          <div id="p-name">&#8212;</div>
-          <div id="p-artist">&#8212;</div>
+          <div id="p-name">&mdash;</div>
+          <div id="p-artist">&mdash;</div>
         </div>
         <div class="prog-wrap">
           <div class="prog-bar" onclick="seekTo(event)"><div class="prog-fill" id="prog-fill"></div></div>
           <div class="prog-times"><span id="t-cur">0:00</span><span id="t-tot">0:00</span></div>
         </div>
         <div class="controls">
-          <!-- Spotify-style shuffle icon -->
           <button class="c-btn" id="btn-shuf" title="Toggle shuffle mode" onclick="toggleShuf()">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
@@ -499,25 +461,22 @@
           <button class="c-btn" onclick="nextT()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
           </button>
-          <!-- Back to playlist -->
           <button class="c-btn" title="Back to playlist" onclick="show('s-playlist')">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
               <line x1="8" y1="6" x2="2" y2="12"/><line x1="2" y1="12" x2="8" y2="18"/><line x1="2" y1="12" x2="22" y2="12"/>
             </svg>
           </button>
         </div>
-        <!-- Rating widget — always here, never in the right panel -->
         <div class="rating-block">
           <div class="rating-top">
             <span>rate this track</span>
-            <span id="cur-rating">&#8212;</span>
+            <span id="cur-rating">&mdash;</span>
           </div>
           <div class="stars" id="stars"></div>
-          <div class="kb-hint"><kbd>1</kbd>&#8211;<kbd>9</kbd> rate &nbsp;&#183;&nbsp; <kbd>0</kbd>=5&#9733; &nbsp;&#183;&nbsp; <kbd>Space</kbd> play/pause &nbsp;&#183;&nbsp; <kbd>&#8594;</kbd> next</div>
+          <div class="kb-hint"><kbd>1</kbd>&ndash;<kbd>9</kbd> rate &nbsp;&middot;&nbsp; <kbd>0</kbd>=5&#9733; &nbsp;&middot;&nbsp; <kbd>Space</kbd> play/pause &nbsp;&middot;&nbsp; <kbd>&rarr;</kbd> next</div>
         </div>
       </div>
 
-      <!-- RIGHT: tabs — Queue / Rankings / Stats -->
       <div class="p-right">
         <div class="tabs">
           <button class="tab on" id="tab-q" onclick="swTab('q')">Queue</button>
@@ -525,13 +484,10 @@
           <button class="tab"    id="tab-s" onclick="swTab('s')">Stats</button>
         </div>
 
-        <!-- QUEUE: header (fixed) + upnext label (fixed) + list (scrollable) -->
-        <!-- Structure is built by renderQ() into this container -->
         <div class="panel on" id="panel-q">
           <div class="q-empty">Start playing to see the queue</div>
         </div>
 
-        <!-- RANKINGS -->
         <div class="panel" id="panel-r">
           <div class="panel-inner">
             <div class="chips">
@@ -544,7 +500,6 @@
           </div>
         </div>
 
-        <!-- STATS -->
         <div class="panel" id="panel-s">
           <div class="panel-inner">
             <div class="stats-scroll"><div id="stats-in"></div></div>
@@ -578,28 +533,64 @@ const REDIRECT = 'https://oyabraian.github.io/musicrating/';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STATE
-// S.tracks  — always the original playlist order, NEVER modified
-// S.queue   — current playback order (seq copy OR shuffled unrated subset)
-// S.qi      — current index in S.queue
-// S.mode    — 'seq' | 'shuffle' | null
-// S.played  — Set of S.qi values completed this cycle (shuffle only)
 // ─────────────────────────────────────────────────────────────────────────────
 const S = {
   token:null, clientId:'', player:null, deviceId:null,
-  tracks:[],          // original order, immutable
-  queue:[],           // active playback queue
+  tracks:[],
+  queue:[],
   qi:-1,
   cur:null,
   playing:false,
   mode:null,
-  played:new Set(),   // shuffle cycle: indices already played
+  played:new Set(),
   ratings:{}, filt:'top',
-  progTimer:null, pos:0, dur:0,
-  hist:[],            // stack of track IDs for prev
+  pos:0, dur:0,
+  hist:[],
 };
 
 let _trackEndLock = false;
 const PTS = "12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PROGRESS — rAF-based (smooth + no constant SDK polling that spins the tab)
+// Syncs actual position from SDK every 5 s when playing
+// ─────────────────────────────────────────────────────────────────────────────
+let _rafId       = null;
+let _syncTimer   = null;
+let _progBase    = 0;   // S.pos value at last real sync
+let _progBaseTs  = 0;   // Date.now() at last real sync
+
+function startProg() {
+  stopProg();
+  _progBase   = S.pos;
+  _progBaseTs = Date.now();
+
+  function tick() {
+    if (!S.playing) { _rafId = null; return; }
+    S.pos = Math.min(_progBase + (Date.now() - _progBaseTs), S.dur);
+    updProg();
+    _rafId = requestAnimationFrame(tick);
+  }
+  _rafId = requestAnimationFrame(tick);
+
+  // Re-sync true position every 5 s — reduces SDK calls from 2/s to 0.2/s
+  _syncTimer = setInterval(async () => {
+    if (!S.player || !S.playing) return;
+    try {
+      const st = await S.player.getCurrentState();
+      if (!st) return;
+      _progBase   = st.position;
+      _progBaseTs = Date.now();
+      S.pos = _progBase;
+      S.dur = st.duration;
+    } catch(e) { /* ignore transient errors */ }
+  }, 5000);
+}
+
+function stopProg() {
+  if (_rafId)     { cancelAnimationFrame(_rafId); _rafId = null; }
+  if (_syncTimer) { clearInterval(_syncTimer);    _syncTimer = null; }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STORAGE
@@ -686,8 +677,12 @@ async function api(url,opts={}){
   const doFetch=()=>fetch(url,{...opts,headers:{'Authorization':'Bearer '+S.token,'Content-Type':'application/json',...(opts.headers||{})}});
   let r=await doFetch();
   if(r.status===401){const ok=await refreshAccessToken();if(ok){r=await doFetch();}else{clearAuth();throw new Error('Session expired.');}}
-  if(!r.ok){const e=await r.json().catch(()=>({}));const msg=e?.error?.message||'HTTP '+r.status;
-    if(r.status===403)throw new Error(msg+' — In Dev Mode you can only load playlists you own.');throw new Error(msg);}
+  if(!r.ok){
+    const e=await r.json().catch(()=>({}));
+    const msg=e?.error?.message||'HTTP '+r.status;
+    if(r.status===403&&url.includes('/playlists/'))throw new Error(msg+' — In Dev Mode you can only load playlists you own.');
+    throw new Error(msg);
+  }
   if(r.status===204) return null; return r.json();
 }
 function extractId(url){
@@ -707,13 +702,13 @@ async function fetchPl(){
     if(!pl||!pl.name) throw new Error('Invalid playlist response.');
     let items=[],next=`https://api.spotify.com/v1/playlists/${id}/items?limit=100`;
     while(next){const pg=await api(next);if(!pg||!pg.items)break;items=items.concat(pg.items);next=pg.next||null;}
-    S.tracks=items.filter(i=>i&&i.item&&i.item.id).map(i=>({
-      id:i.item.id, name:i.item.name||'Unknown',
-      artist:(i.item.artists||[]).map(a=>a.name).join(', ')||'Unknown',
-      albumArt:i.item.album?.images?.[1]?.url||i.item.album?.images?.[0]?.url||'',
-      duration:i.item.duration_ms||0,
+    S.tracks=items.filter(i=>i&&i.track&&i.track.id).map(i=>({
+      id:i.track.id, name:i.track.name||'Unknown',
+      artist:(i.track.artists||[]).map(a=>a.name).join(', ')||'Unknown',
+      albumArt:i.track.album?.images?.[1]?.url||i.track.album?.images?.[0]?.url||'',
+      duration:i.track.duration_ms||0,
     }));
-    if(!S.tracks.length) throw new Error(`Got ${items.length} raw items but 0 valid tracks.`);
+    if(!S.tracks.length) throw new Error(`Got ${items.length} raw items but 0 valid tracks. Make sure it's a playlist you own.`);
     document.getElementById('pl-name').textContent=pl.name;
     document.getElementById('pl-desc').textContent=S.tracks.length+' tracks';
     const art=pl.images?.[0]?.url; if(art) document.getElementById('pl-art').src=art;
@@ -736,26 +731,89 @@ function clearPl(){
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SPOTIFY WEB PLAYBACK SDK
+// FIX: async getOAuthToken refreshes token when needed
+// FIX: all error event types are handled so failures are visible
 // ─────────────────────────────────────────────────────────────────────────────
-window.onSpotifyWebPlaybackSDKReady=()=>{if(S.token)initPlayer();};
+window.onSpotifyWebPlaybackSDKReady = () => { if (S.token) initPlayer(); };
+
 function initPlayer(){
   if(S.player) return;
-  S.player=new Spotify.Player({name:'musicrating',getOAuthToken:cb=>cb(S.token),volume:0.8});
-  S.player.addListener('ready',({device_id})=>{S.deviceId=device_id;setHdr('on','connected');toast('Player ready');});
-  S.player.addListener('not_ready',()=>setHdr('','offline'));
-  S.player.addListener('player_state_changed',st=>{
+
+  S.player = new Spotify.Player({
+    name: 'musicrating',
+    // FIX: async callback — refreshes token if it's near expiry before handing it over
+    getOAuthToken: async cb => {
+      try {
+        const exp = localStorage.getItem('mr_exp');
+        if (!S.token || (exp && Date.now() > +exp - 60000)) {
+          await refreshAccessToken();
+        }
+      } catch(e) { /* best-effort */ }
+      cb(S.token);
+    },
+    volume: 0.8
+  });
+
+  S.player.addListener('ready', ({ device_id }) => {
+    S.deviceId = device_id;
+    setHdr('on', 'connected');
+    toast('Player ready');
+  });
+
+  S.player.addListener('not_ready', ({ device_id }) => {
+    console.warn('Spotify player went offline, device_id:', device_id);
+    S.deviceId = null;
+    setHdr('', 'offline');
+  });
+
+  // FIX: previously these error events were missing — player failed completely silently
+  S.player.addListener('initialization_error', ({ message }) => {
+    console.error('Spotify initialization_error:', message);
+    setHdr('', 'player error');
+    toast('Player init failed: ' + message);
+    S.player = null; // allow retry on next call to initPlayer()
+  });
+
+  S.player.addListener('authentication_error', ({ message }) => {
+    console.error('Spotify authentication_error:', message);
+    setHdr('', 'auth error');
+    toast('Auth error — try reconnecting');
+    document.getElementById('btn-reconnect').style.display = 'inline-flex';
+    S.player = null;
+  });
+
+  S.player.addListener('account_error', ({ message }) => {
+    console.error('Spotify account_error:', message);
+    setHdr('', 'premium needed');
+    toast('Spotify Premium is required for playback');
+    S.player = null;
+  });
+
+  S.player.addListener('playback_error', ({ message }) => {
+    console.error('Spotify playback_error:', message);
+    toast('Playback error: ' + message);
+  });
+
+  S.player.addListener('player_state_changed', st => {
     if(!st) return;
-    S.playing=!st.paused; S.pos=st.position; S.dur=st.duration;
+    S.playing = !st.paused;
+    // Sync position from SDK event — this is the authoritative source
+    S.pos = st.position;
+    S.dur = st.duration;
+    _progBase  = S.pos;
+    _progBaseTs = Date.now();
     updPlayBtn(); updProg(); updArt();
-    if(st.paused&&st.position===0&&st.track_window.previous_tracks.length>0){
+    if(st.paused && st.position===0 && st.track_window.previous_tracks.length > 0){
       if(!_trackEndLock){
-        _trackEndLock=true;
-        setTimeout(()=>{_trackEndLock=false; if(!S.playing) nextT();},900);
+        _trackEndLock = true;
+        setTimeout(()=>{ _trackEndLock=false; if(!S.playing) nextT(); }, 900);
       }
     }
   });
+
   S.player.connect();
 }
+
 function setHdr(cls,lbl){
   document.getElementById('hdr-dot').className='dot'+(cls?' '+cls:'');
   document.getElementById('hdr-lbl').textContent=lbl;
@@ -765,9 +823,12 @@ function setHdr(cls,lbl){
 // PLAYBACK
 // ─────────────────────────────────────────────────────────────────────────────
 async function playTrack(t){
-  if(!S.deviceId){toast('Player not ready');return;}
+  if(!S.deviceId){
+    toast('Player not ready — wait for "connected" status in the top right');
+    return;
+  }
   S.cur=t;
-  updPlayerUI(t);   // update UI immediately — never stale
+  updPlayerUI(t);
   try{
     await api(`https://api.spotify.com/v1/me/player/play?device_id=${S.deviceId}`,
       {method:'PUT',body:JSON.stringify({uris:['spotify:track:'+t.id]})});
@@ -778,7 +839,6 @@ async function togglePlay(){if(S.player)await S.player.togglePlay();}
 function updPlayBtn(){
   document.getElementById('ico-play').style.display=S.playing?'none':'block';
   document.getElementById('ico-pause').style.display=S.playing?'block':'none';
-  // mini bar buttons
   const np=document.getElementById('np-ico-play');
   const npp=document.getElementById('np-ico-pause');
   if(np) np.style.display=S.playing?'none':'block';
@@ -789,42 +849,23 @@ function updArt(){document.getElementById('art-frame').classList.toggle('playing
 
 // ─────────────────────────────────────────────────────────────────────────────
 // QUEUE BUILDING
-// Two modes:
-//   seq     → S.tracks in original order; all songs; rated songs stay in
-//   shuffle → only UNRATED tracks, Fisher-Yates random order
 // ─────────────────────────────────────────────────────────────────────────────
-
-/** Build a sequential queue: copy of S.tracks in original order */
 function buildSeqQ(){
-  S.queue=[...S.tracks];   // spread = copy, S.tracks never mutated
+  S.queue=[...S.tracks];
   S.qi=0; S.played=new Set(); S.mode='seq';
   syncShufBtn();
 }
-
-/** Build a shuffle queue: Fisher-Yates of UNRATED tracks only.
- *  Returns false if there are no unrated tracks. */
 function buildShuffleQ(startId){
-  // Pool = tracks that have NOT been rated
   let pool=S.tracks.filter(t=>!S.ratings[t.id]);
   if(!pool.length) return false;
-  // Fisher-Yates shuffle
   for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
-  // If a startId is given, move it to front
-  if(startId){
-    const si=pool.findIndex(x=>x.id===startId);
-    if(si>0){[pool[0],pool[si]]=[pool[si],pool[0]];}
-  }
+  if(startId){const si=pool.findIndex(x=>x.id===startId);if(si>0){[pool[0],pool[si]]=[pool[si],pool[0]];}}
   S.queue=pool; S.qi=0; S.played=new Set(); S.mode='shuffle';
   syncShufBtn(); return true;
 }
-
 function syncShufBtn(){
   document.getElementById('btn-shuf').classList.toggle('active',S.mode==='shuffle');
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// PLAY STARTERS (called from playlist page buttons)
-// ─────────────────────────────────────────────────────────────────────────────
 
 function goPlaySeq(){
   if(!S.tracks.length){toast('No tracks loaded');return;}
@@ -832,7 +873,6 @@ function goPlaySeq(){
   show('s-player');
   playTrack(S.queue[0]);
 }
-
 function goPlayShuffle(){
   if(!S.tracks.length){toast('No tracks loaded');return;}
   if(!buildShuffleQ()){toast('All tracks are already rated! Use Play to replay in order.');return;}
@@ -840,26 +880,18 @@ function goPlayShuffle(){
   playTrack(S.queue[0]);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SHUFFLE TOGGLE (player controls button)
-// ─────────────────────────────────────────────────────────────────────────────
 function toggleShuf(){
   if(S.mode==='shuffle'){
-    // → switch to sequential
     const curId=S.cur?.id;
     buildSeqQ();
-    // put qi at current song if possible
     if(curId){const i=S.queue.findIndex(x=>x.id===curId);if(i!==-1)S.qi=i;}
     renderQ(); toast('Now playing in playlist order');
   }else{
-    // → switch to shuffle (unrated only)
     const curId=S.cur?.id;
     if(!buildShuffleQ(curId)){toast('All tracks rated — nothing left to shuffle');return;}
     renderQ(); toast('Shuffle on — '+S.queue.length+' unrated tracks');
   }
 }
-
-/** Reshuffle while staying in shuffle mode */
 function reshuffleQ(){
   const curId=S.cur?.id;
   if(!buildShuffleQ(curId)){toast('All tracks rated — nothing to shuffle');return;}
@@ -867,11 +899,10 @@ function reshuffleQ(){
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// NAVIGATION THROUGH QUEUE
+// NAVIGATION
 // ─────────────────────────────────────────────────────────────────────────────
 function nextT(){
   if(!S.queue.length){
-    // No queue yet — build based on mode
     if(S.mode==='shuffle'){if(!buildShuffleQ()){toast('All tracks rated!');return;}}
     else buildSeqQ();
   }
@@ -879,96 +910,63 @@ function nextT(){
   let nqi=S.qi+1;
   if(S.mode==='shuffle'){
     if(nqi>=S.queue.length){
-      // End of shuffle cycle — rebuild with remaining unrated
       if(!buildShuffleQ()){toast('All tracks rated — great work!');return;}
       toast('Full cycle — new shuffle of '+S.queue.length+' unrated tracks');
       nqi=0;
     }
   }else{
-    // Sequential: wrap around
     if(nqi>=S.queue.length) nqi=0;
   }
   if(S.cur) S.hist.push(S.cur.id);
   S.qi=nqi; playTrack(S.queue[S.qi]);
 }
-
 function prevT(){
   if(!S.hist.length){toast('No previous track');return;}
   const id=S.hist.pop(); const t=S.tracks.find(x=>x.id===id); if(!t) return;
   const i=S.queue.findIndex(x=>x.id===id); if(i!==-1) S.qi=i;
   playTrack(t);
 }
-
-/**
- * Play a specific track from the PLAYLIST list (or Rankings).
- *
- * Behaviour:
- *  - shuffle mode: start a NEW shuffle with this track first (if unrated),
- *    or just play it as a one-off if already rated
- *  - seq mode / null: jump to this track in the seq queue (or build seq)
- *
- * IMPORTANT: S.tracks is never reordered. Only S.queue changes.
- */
 function playSpec(id){
   const t=S.tracks.find(x=>x.id===id); if(!t) return;
-
   if(S.cur) S.hist.push(S.cur.id);
-
   const isRated=!!S.ratings[id];
-
-  if(S.mode==='shuffle' || S.mode===null){
-    // Build a fresh shuffle with this track first (if unrated)
-    if(!isRated && buildShuffleQ(id)){
-      // qi is already 0 (the clicked track)
-    }else{
-      // Track is rated or pool empty: play as one-off without rebuilding queue
-      // qi stays as-is; just play the track
-    }
+  if(S.mode==='shuffle'||S.mode===null){
+    if(!isRated && buildShuffleQ(id)){/* qi=0, correct */}
   }else{
-    // seq mode: find the track in the seq queue and jump to it
     if(!S.queue.length) buildSeqQ();
     const i=S.queue.findIndex(x=>x.id===id);
     if(i!==-1) S.qi=i;
   }
-
   playTrack(t);
   show('s-player');
 }
-
-/** Play a specific index in the current queue (called from queue list rows) */
 function playQI(i){
   if(S.cur) S.hist.push(S.cur.id);
   S.qi=i; playTrack(S.queue[i]);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PROGRESS
+// PROGRESS UI
 // ─────────────────────────────────────────────────────────────────────────────
-function startProg(){
-  stopProg();
-  S.progTimer=setInterval(async()=>{
-    if(!S.player||!S.playing) return;
-    const st=await S.player.getCurrentState(); if(!st) return;
-    S.pos=st.position; S.dur=st.duration; updProg();
-  },500);
-}
-function stopProg(){if(S.progTimer)clearInterval(S.progTimer);S.progTimer=null;}
 function updProg(){
   const pct=S.dur>0?(S.pos/S.dur)*100:0;
   document.getElementById('prog-fill').style.width=pct+'%';
   document.getElementById('t-cur').textContent=ms2t(S.pos);
   document.getElementById('t-tot').textContent=ms2t(S.dur);
-  // Queue panel mini progress
   const qf=document.getElementById('q-prog-fill'); if(qf) qf.style.width=pct.toFixed(1)+'%';
   const qtc=document.getElementById('q-t-cur'); if(qtc) qtc.textContent=ms2t(S.pos);
   const qtt=document.getElementById('q-t-tot'); if(qtt) qtt.textContent=ms2t(S.dur);
-  // Now-playing bar progress
   const np=document.getElementById('np-prog'); if(np) np.style.width=pct.toFixed(1)+'%';
 }
 async function seekTo(e){
   const bar=e.currentTarget, r=bar.getBoundingClientRect();
   const pct=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
-  if(S.player) await S.player.seek(Math.floor(pct*S.dur));
+  if(S.player){
+    const newPos=Math.floor(pct*S.dur);
+    await S.player.seek(newPos);
+    // Update local tracking immediately so progress doesn't jump back
+    S.pos=newPos; _progBase=newPos; _progBaseTs=Date.now();
+  }
 }
 function ms2t(ms){const s=Math.floor(ms/1000),m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');}
 
@@ -980,11 +978,9 @@ function updPlayerUI(t){
   document.getElementById('p-artist').textContent=t.artist;
   if(t.albumArt) document.getElementById('p-art').src=t.albumArt;
   const r=S.ratings[t.id]; updRatingUI(r?r.rating:null);
-  // Update now-playing mini bar
   updNpBar(t);
   renderQ(); refreshRank(); renderTL();
 }
-
 function updNpBar(t){
   if(!t) return;
   const bar=document.getElementById('np-bar');
@@ -995,7 +991,7 @@ function updNpBar(t){
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// RATING DISPLAY  (internal 1–10 → displayed as X.X / 5)
+// RATING DISPLAY (1–10 internal → X.X/5 display)
 // ─────────────────────────────────────────────────────────────────────────────
 function toDisp(r){
   if(r==null) return '—';
@@ -1003,9 +999,7 @@ function toDisp(r){
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// HALF-STAR INTERACTIVE WIDGET
-// 5 stars, each with left-half (odd) and right-half (even) click zones
-// Internal value: 1–10; displayed as X.X/5
+// HALF-STAR WIDGET
 // ─────────────────────────────────────────────────────────────────────────────
 function initStars(){
   const el=document.getElementById('stars'); el.innerHTML='';
@@ -1045,7 +1039,7 @@ function rateT(r){
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MINI STARS (for rankings panel)
+// MINI STARS
 // ─────────────────────────────────────────────────────────────────────────────
 function miniStars(rating,uid){
   return Array.from({length:5},(_,idx)=>{
@@ -1057,9 +1051,7 @@ function miniStars(rating,uid){
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// QUEUE PANEL RENDERER
-// Outputs: .q-header (fixed) + .q-upnext-head (fixed) + .q-list (scrollable)
-// These three are direct children of #panel-q which is display:flex flex-direction:column
+// QUEUE PANEL
 // ─────────────────────────────────────────────────────────────────────────────
 function renderQ(){
   const el=document.getElementById('panel-q');
@@ -1067,7 +1059,6 @@ function renderQ(){
     el.innerHTML='<div class="q-empty">Start playing to see the queue</div>';
     return;
   }
-
   const pct=S.dur>0?(S.pos/S.dur)*100:0;
   const modeLabel=S.mode==='shuffle'?'Shuffle':'In Order';
   const modeClass=S.mode==='shuffle'?'shuffle':'';
@@ -1075,7 +1066,6 @@ function renderQ(){
     ? Math.max(0,S.queue.length-S.qi-1)+' left'
     : (S.queue.length-S.qi-1)+' remaining';
 
-  // Build queue rows
   const rowsHTML=S.queue.map((t,i)=>{
     const isNow=i===S.qi, isDone=S.played.has(i)&&!isNow;
     return`<div class="q-row ${isNow?'now':''} ${isDone?'done':''}" onclick="playQI(${i})">
@@ -1085,16 +1075,12 @@ function renderQ(){
     </div>`;
   }).join('');
 
-  // Spotify-style shuffle SVG for reshuffle button
   const shuffleSVG=`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
-    <path d="m18 2 4 4-4 4"/>
-    <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/>
-    <path d="M22 18h-5.9c-1.3 0-2.5-.7-3.1-1.8l-.5-.8"/>
-    <path d="m18 14 4 4-4 4"/>
+    <path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/>
+    <path d="M22 18h-5.9c-1.3 0-2.5-.7-3.1-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/>
   </svg>`;
 
-  // Three separate divs: header (fixed), upnext-head (fixed), list (scrollable)
   el.innerHTML=`
     <div class="q-header">
       <div class="q-now-label">Now Playing</div>
@@ -1131,7 +1117,6 @@ function renderQ(){
     </div>
     <div class="q-list" id="q-list-inner">${rowsHTML}</div>`;
 
-  // Scroll current into view inside the list
   setTimeout(()=>{
     const c=document.querySelector('#q-list-inner .now');
     if(c) c.scrollIntoView({block:'nearest',behavior:'smooth'});
@@ -1159,7 +1144,6 @@ function refreshRank(){
   if(!sorted.length){el.innerHTML='<div class="empty">Nothing here yet</div>';return;}
   el.innerHTML=sorted.slice(0,60).map((t,i)=>{
     const r=S.ratings[t.id], isNow=S.cur?.id===t.id, uid='r'+i;
-    // Score shown as X.X/5
     const scoreHTML=r
       ?`<div class="r-score-num">${toDisp(r.rating)}</div><div class="mini-stars">${miniStars(r.rating,uid)}</div>`
       :`<div class="r-score-num none">&#8212;</div>`;
@@ -1198,8 +1182,7 @@ function refreshStats(){
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TRACK LIST (playlist page)
-// Always renders S.tracks in original order — queue order NEVER shown here
+// TRACK LIST
 // ─────────────────────────────────────────────────────────────────────────────
 function renderTL(){
   const el=document.getElementById('tl'); if(!S.tracks.length){el.innerHTML='';return;}
@@ -1222,13 +1205,11 @@ function show(id){
   const sc=document.getElementById(id);
   sc.style.display='flex'; sc.classList.add('active');
   document.getElementById('btn-reconnect').style.display=(id==='s-setup')?'none':'inline-flex';
-  // Show/hide now-playing bar only on playlist page
   const bar=document.getElementById('np-bar');
   if(bar) bar.classList.toggle('visible', id==='s-playlist'&&!!S.cur);
   if(id==='s-player'){renderQ();refreshRank();refreshStats();}
   if(id==='s-playlist'){renderTL();}
 }
-
 function swTab(t){
   ['q','r','s'].forEach(x=>{
     document.getElementById('panel-'+x)?.classList.toggle('on',x===t);
@@ -1295,7 +1276,6 @@ async function init(){
   if(loadToken()){show('s-playlist');if(window.Spotify?.Player)initPlayer();return;}
   else show('s-setup');
 }
-window.onSpotifyWebPlaybackSDKReady=()=>{if(S.token)initPlayer();};
 init();
 </script>
 </body>
