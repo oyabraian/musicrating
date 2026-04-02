@@ -923,7 +923,7 @@ function prevT(){
 
 function toggleNR(){
   S.noRepeat=!S.noRepeat;
-  document.getElementById('btn-nr').classList.toggle('active',S.noRepeat);
+  document.getElementById('btn-nr')?.classList.toggle('active',S.noRepeat);
   toast(S.noRepeat?'Shuffle: no-repeat on':'Shuffle: full random');
   renderQ();
 }
@@ -1306,7 +1306,7 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 async function init(){
   loadR();
   initStars();
-  document.getElementById('btn-nr').classList.toggle('active', S.noRepeat);
+  document.getElementById('btn-nr')?.classList.toggle('active', S.noRepeat);
   const saved=loadCid();if(saved)document.getElementById('cid').value=saved;
   const p=new URLSearchParams(window.location.search);
   if(p.get('code')){
