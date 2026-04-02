@@ -583,22 +583,25 @@ async function fetchPl() {
     if(!pl||!pl.name) throw new Error('Invalid playlist response from Spotify.');
 
     // Step 2: fetch tracks using new /items endpoint (required since Feb 2026)
+    // No fields filter — Spotify silently returns empty data if the filter is malformed
     let items=[];
-    let next=`https://api.spotify.com/v1/playlists/${id}/items?fields=items(track(id,name,duration_ms,album(name,images),artists(name))),next&limit=100`;
+    let next=`https://api.spotify.com/v1/playlists/${id}/items?limit=100`;
     while(next){
       const pg=await api(next);
       if(!pg||!pg.items) break;
       items=items.concat(pg.items);
-      next=pg.next;
+      next=pg.next||null;
     }
-    if(!items.length) throw new Error('No tracks returned. In Spotify Dev Mode you can only load playlists you own. Make sure this playlist belongs to the account you logged in with.');
+    if(!items.length) throw new Error('No tracks returned. Make sure this playlist belongs to the Spotify account you logged in with (Dev Mode restriction).');
 
-    S.tracks=items.filter(i=>i.track&&i.track.id).map(i=>({
-      id:i.track.id, name:i.track.name,
-      artist:i.track.artists.map(a=>a.name).join(', '),
-      albumArt:i.track.album.images[1]?.url||i.track.album.images[0]?.url||'',
-      duration:i.track.duration_ms,
-    }));
+    S.tracks=items
+      .filter(i=>i&&i.track&&i.track.id&&i.track.type==='track')
+      .map(i=>({
+        id:i.track.id, name:i.track.name,
+        artist:(i.track.artists||[]).map(a=>a.name).join(', '),
+        albumArt:i.track.album?.images?.[1]?.url||i.track.album?.images?.[0]?.url||'',
+        duration:i.track.duration_ms,
+      }));
     document.getElementById('pl-name').textContent=pl.name;
     document.getElementById('pl-desc').textContent=S.tracks.length+' tracks';
     const art=pl.images?.[0]?.url; if(art) document.getElementById('pl-art').src=art;
